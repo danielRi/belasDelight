@@ -2,6 +2,8 @@
     global variables
 ]]
 
+require "playableCharacter"
+
 RECTANGLE_MODE_FILL = "fill"
 KEYBOARD_DOWN_LEFT = "left"
 KEYBOARD_DOWN_RIGHT = "right"
@@ -99,35 +101,7 @@ function love.update(deltaTime)
     end
     ]]
 
-    velocityX, velocityY = player.body:getLinearVelocity()
-    if player.walking == WALKING_DIRECTION_LEFT then
-        
-        if velocityX <= PLAYER_MAX_VELOCITY_LEFT then
-            player.body:setLinearVelocity(PLAYER_MAX_VELOCITY_LEFT, velocityY)
-        else
-            player.body:applyForce(-2000, 0)
-        end
-        player.body:applyForce(-2000, 0)
-    elseif player.walking == WALKING_DIRECTION_RIGHT then
-        if velocityX >= PLAYER_MAX_VELOCITY_RIGHT then
-            player.body:setLinearVelocity(PLAYER_MAX_VELOCITY_RIGHT, velocityY)
-        else
-            player.body:applyForce(2000, 0)
-        end
-    end
-
-    if player.jetpackIsOn == true then
-        if velocityY > 0 then
-            -- body
-            player.body:applyForce(0, -1000)
-            print("jetpack is on")
-        end
-        if velocityY > 100 then
-            player.body:applyForce(0, -2000)
-            print("jetpack is higher")
-        end
-        
-    end
+    player:update()
 end
 
 -- called each frame
@@ -224,15 +198,7 @@ function createPlayer()
     WALKING_DIRECTION_NONE = "none"
     WALKING_DIRECTION_LEFT = "left"
     WALKING_DIRECTION_RIGHT = "right"
-    player = {}
-    player.body = love.physics.newBody(world, 200, 550, "dynamic")
-    player.shape = love.physics.newRectangleShape(0, 0, 30, 60)
-    player.fixture = love.physics.newFixture(player.body, player.shape, 4) -- A higher density gives it more mass.
-    player.body:setFixedRotation(true)
-    player.walking = WALKING_DIRECTION_NONE
-    player.jetpackIsOn = false
-    player.fixture:setUserData("player") 
-    player.contacts = 0
+    player = PlayableCharacter(200, 500, 30, 60, world)
 end
 
 function createProjectile()
