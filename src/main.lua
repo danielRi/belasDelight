@@ -160,10 +160,14 @@ function handleKeyboard(deltaTime)
 
 end
 
+
 function love.keypressed(key)
-    if key == "space" then
-        createBullet()
-    end
+    player:handleInputPressed(key)
+end
+
+function love.keyreleased(key)
+    print("key released")
+    player:handleInputReleased(key)
 end
 
 
