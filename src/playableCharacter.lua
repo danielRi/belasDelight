@@ -4,6 +4,11 @@ PlayableCharacter = MobileObject:extend()
 
 SPACE_KEY = "space"
 
+INITIAL_JUMP_FORCE = -500
+JUMP_FORCE = -3000
+MAX_JUMP_FRAMES = 10
+FALL_FORCE = 500
+
 function PlayableCharacter:new(x, y, width, height, world)
     PlayableCharacter.super:new(x, y, width, height, world)
     self.jetpackIsOn = false
@@ -11,14 +16,28 @@ function PlayableCharacter:new(x, y, width, height, world)
     self.contacts = 0
     self.isJumping = false
     self.initialJump = true
+    self.jumpFramesLeft = MAX_JUMP_FRAMES
 end
 
 
 
 function PlayableCharacter:update()
 
+    local velocityX, velocityY = self.body:getLinearVelocity()
+
+
     if self.isJumping == true then
-        self.body:applyForce(0, -1000)
+        if self.jumpFramesLeft > 0 then
+            self.body:applyForce(0, JUMP_FORCE)
+            print("ascending: " .. velocityY)
+            self.jumpFramesLeft = self.jumpFramesLeft - 1
+        else
+            self.body:applyForce(0, FALL_FORCE)
+            print("not ascending" .. velocityY)
+        end
+        
+    else
+        self.body:applyForce(0, FALL_FORCE)
     end
 
 
@@ -45,7 +64,7 @@ end
 function PlayableCharacter:jump()
     if self.initialJump == true then
         print("impulse")
-        self.body:applyLinearImpulse(0,-500)
+        self.body:applyLinearImpulse(0, INITIAL_JUMP_FORCE)
         self.initialJump = false
     end
 end
@@ -58,12 +77,14 @@ function PlayableCharacter:handleInputPressed(button)
         self:jump()
         self.isJumping = true
     end
+
 end
 
 
 function PlayableCharacter:handleInputReleased(button)
     print("input released")
     self.initialJump = true
+    self.jumpFramesLeft = MAX_JUMP_FRAMES
     if button == SPACE_KEY then
         self.isJumping = false
     end
