@@ -1,3 +1,11 @@
+--
+-- Created by IntelliJ IDEA.
+-- User: driegler
+-- Date: 28.06.17
+-- Time: 16:19
+-- To change this template use File | Settings | File Templates.
+--
+
 --[[
     global variables
 ]]
@@ -47,18 +55,18 @@ function love.load()
     platform1.fixture = love.physics.newFixture(platform1.body, platform1.shape)
     platform1.fixture:setUserData("platform1")
 
-        platform2 = {}
+    platform2 = {}
     platform2.body = love.physics.newBody(world, 700, 500)
     platform2.shape = love.physics.newRectangleShape(60, 20)
     platform2.fixture = love.physics.newFixture(platform2.body, platform2.shape)
     platform2.fixture:setUserData("platform2")
 
-        platform3 = {}
+    platform3 = {}
     platform3.body = love.physics.newBody(world, 400, 450)
     platform3.shape = love.physics.newRectangleShape(60, 20)
     platform3.fixture = love.physics.newFixture(platform3.body, platform3.shape)
     platform3.fixture:setUserData("platform3")
-    
+
     --[[let's create a ball
     ball = {}
     ball.body = love.physics.newBody(world, WINDOW_WIDTH/2, WINDOW_HEIGHT/2, "dynamic") --place the body in the center of the world and make it dynamic, so it can move around
@@ -115,18 +123,18 @@ function love.draw()
     love.graphics.setColor(51, 26, 0) -- set the drawing color to green for the ground
     love.graphics.polygon("fill", ground.body:getWorldPoints(ground.shape:getPoints())) -- draw a "filled in" polygon using the ground's coordinates
 
-        love.graphics.setColor(151, 26, 0) -- set the drawing color to green for the ground
+    love.graphics.setColor(151, 26, 0) -- set the drawing color to green for the ground
     love.graphics.polygon("fill", platform1.body:getWorldPoints(platform1.shape:getPoints()))
 
-        love.graphics.setColor(51, 126, 0) -- set the drawing color to green for the ground
+    love.graphics.setColor(51, 126, 0) -- set the drawing color to green for the ground
     love.graphics.polygon("fill", platform2.body:getWorldPoints(platform2.shape:getPoints()))
 
-        love.graphics.setColor(51, 26, 100) -- set the drawing color to green for the ground
+    love.graphics.setColor(51, 26, 100) -- set the drawing color to green for the ground
     love.graphics.polygon("fill", platform3.body:getWorldPoints(platform3.shape:getPoints()))
-    
+
     --love.graphics.setColor(193, 47, 14) --set the drawing color to red for the ball
     --love.graphics.circle("fill", ball.body:getX(), ball.body:getY(), ball.shape:getRadius())
-    
+
     love.graphics.setColor(50, 50, 50) -- set the drawing color to grey for the blocks
     love.graphics.polygon("fill", player.body:getWorldPoints(player.shape:getPoints()))
 
@@ -268,12 +276,12 @@ function beginContact(a, b, coll)
         if y < 0 then
             player.contacts = 1
         end
-        
+
     end
     print(player.contacts)
 end
- 
- 
+
+
 function endContact(a, b, coll)
     x,y = coll:getNormal()
     print(a:getUserData() .. " collided with "..b:getUserData() .. " with a vector normal of" .. x .. "/" .. y)
@@ -282,11 +290,11 @@ function endContact(a, b, coll)
     end
     print(player.contacts)
 end
- 
+
 function preSolve(a, b, coll)
 
 end
- 
+
 function postSolve(a, b, coll, normalimpulse, tangentimpulse)
--- we won't do anything with this function
+    -- we won't do anything with this function
 end

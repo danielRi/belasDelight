@@ -25,7 +25,6 @@ function PlayableCharacter:update()
 
     local velocityX, velocityY = self.body:getLinearVelocity()
 
-
     if self.isJumping == true then
         if self.jumpFramesLeft > 0 then
             self.body:applyForce(0, JUMP_FORCE)
