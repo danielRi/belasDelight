@@ -10,17 +10,17 @@ require "playableCharacter"
 
 -- called once at start
 function love.load()
-
+    player = PlayableCharacter(200, 500, 30, 60, world)
 end
 
 -- called each frame
 function love.update(deltaTime)
-
+    player:update(deltaTime)
 end
 
 -- called each frame
 function love.draw()
-
+    player:draw()
 end
 
 
@@ -35,11 +35,11 @@ end
 
 
 function love.keypressed(key)
-
+    player:handleInputPressed(key)
 end
 
 function love.keyreleased(key)
-
+    player:handleInputReleased(key)
 end
 
 function love.gamepadpressed(joystick, button)

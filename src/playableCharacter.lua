@@ -2,7 +2,11 @@
 require "mobileObject"
 PlayableCharacter = MobileObject:extend()
 
-SPACE_KEY = "space"
+KEY_SPACE = "space"
+KEY_LEFT = "a"
+KEY_RIGHT = "d"
+KEY_UP = "w"
+KEY_DOWN = "s"
 
 INITIAL_JUMP_FORCE = -500
 JUMP_FORCE = -3000
@@ -11,82 +15,52 @@ FALL_FORCE = 500
 
 function PlayableCharacter:new(x, y, width, height, world)
     PlayableCharacter.super:new(x, y, width, height, world)
-    self.jetpackIsOn = false
-    self.fixture:setUserData("player") 
-    self.contacts = 0
-    self.isJumping = false
-    self.initialJump = true
-    self.jumpFramesLeft = MAX_JUMP_FRAMES
+
 end
 
 
 
-function PlayableCharacter:update()
-
-    local velocityX, velocityY = self.body:getLinearVelocity()
-
-    if self.isJumping == true then
-        if self.jumpFramesLeft > 0 then
-            self.body:applyForce(0, JUMP_FORCE)
-            print("ascending: " .. velocityY)
-            self.jumpFramesLeft = self.jumpFramesLeft - 1
-        else
-            self.body:applyForce(0, FALL_FORCE)
-            print("not ascending" .. velocityY)
-        end
-        
-    else
-        self.body:applyForce(0, FALL_FORCE)
-    end
-
-
-    if self.jetpackIsOn == true then
-        if velocityY > 0 then
-            -- body
-            self.body:applyForce(0, -1000)
-            print("jetpack is on")
-        end
-        if velocityY > 100 then
-            self.body:applyForce(0, -2000)
-            print("jetpack is higher")
-        end
-        
+function PlayableCharacter:update(deltaTime)
+    PlayableCharacter.super:update(deltaTime)
+    print("go " .. self.shouldGoLeft)
+    if self.shouldGoLeft == true then
+        print("go left " .. self.shouldGoLeft)
+        self.x = self.x + (5*deltaTime)
+        print("go left " .. self.shouldGoRight)
+    elseif self.shouldGoRight == true then
+        self.x = self.x - (5*deltaTime)
     end
 end
 
 
 function PlayableCharacter:draw()
-
+    PlayableCharacter.super:draw()
 end
 
 
 function PlayableCharacter:jump()
-    if self.initialJump == true then
-        print("impulse")
-        self.body:applyLinearImpulse(0, INITIAL_JUMP_FORCE)
-        self.initialJump = false
-    end
+
 end
 
 
 function PlayableCharacter:handleInputPressed(button)
-    
-    if button == SPACE_KEY then
-        print("about to jump")
-        self:jump()
-        self.isJumping = true
+    print("button pressed: " .. button)
+    if button == KEY_LEFT then
+        print("go left")
+        self.shouldGoLeft = true
+        self.shouldGoRight = false
+    elseif button == KEY_RIGHT then
+        print("go right")
+        self.shouldGoRight = true
+        self.shouldGoLeft = false
     end
 
 end
 
 
 function PlayableCharacter:handleInputReleased(button)
-    print("input released")
-    self.initialJump = true
-    self.jumpFramesLeft = MAX_JUMP_FRAMES
-    if button == SPACE_KEY then
-        self.isJumping = false
-    end
+    self.shouldGoRight = false
+    self.shouldGoLeft = false
 end
 
 
